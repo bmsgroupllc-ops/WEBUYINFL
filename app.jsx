@@ -171,14 +171,18 @@ function PropertyForm() {
   formData.append("Phone", form.phone);
   formData.append("Timeline", form.timeline);
 
-  await fetch("https://formspree.io/f/mzdonjdw", {
-    method: "POST",
-    body: formData,
-    headers: {
-      Accept: "application/json",
-    },
-  });
+ const response = await fetch("https://formspree.io/f/mzdonjdw", {
+  method: "POST",
+  body: formData,
+  headers: {
+    Accept: "application/json",
+  },
+});
 
+if (!response.ok) {
+  alert("Form failed");
+  return;
+}
   setSubmitted(true);
 };
 
