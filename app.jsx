@@ -162,7 +162,22 @@ function PropertyForm() {
   const submit = async (e) => {
   e.preventDefault();
 
-  alert("Form submitted!");
+  const formData = new FormData();
+
+  formData.append("Property Address", form.address);
+  formData.append("City", form.city);
+  formData.append("Property Type", form.type);
+  formData.append("Name", form.name);
+  formData.append("Phone", form.phone);
+  formData.append("Timeline", form.timeline);
+
+  await fetch("https://formspree.io/f/mzdonjdw", {
+    method: "POST",
+    body: formData,
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
   setSubmitted(true);
 };
