@@ -159,10 +159,13 @@ function PropertyForm() {
     address: "", city: "", name: "", phone: "", type: "Single-family home", timeline: "Within 30 days"
   });
   const upd = (k) => (e) => setForm({ ...form, [k]: e.target.value });
-  const submit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+  const submit = async (e) => {
+  e.preventDefault();
+
+  alert("Form submitted!");
+
+  setSubmitted(true);
+};
 
   if (submitted) {
     return (
@@ -411,7 +414,7 @@ function WhatWeBuy() {
   );
 }
 
-function HowItWorks() {
+function HowItWorks() 
   const steps = [
     {
       n: "01",
