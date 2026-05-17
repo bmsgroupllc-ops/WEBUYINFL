@@ -248,16 +248,9 @@ function PropertyForm() {
           </select>
         </div>
       </div>
-
-     <a
-  href="https://tally.so/r/2ElbOe"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="btn btn-primary btn-lg btn-full"
-  style={{ marginTop: 22, display: "flex", justifyContent: "center", alignItems: "center" }}
->
+<button type="submit" className="btn btn-primary btn-lg btn-full" style={{ marginTop: 22 }}>
   Get my no-obligation offer <Icon.ArrowRight />
-</a>
+</button>
 
       <div className="form-divider">or speak with us directly</div>
 
