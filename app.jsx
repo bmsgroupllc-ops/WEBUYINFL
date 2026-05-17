@@ -179,10 +179,6 @@ function PropertyForm() {
   },
 });
 
-if (!response.ok) {
-  alert("Form failed");
-  return;
-}
   setSubmitted(true);
 };
 
