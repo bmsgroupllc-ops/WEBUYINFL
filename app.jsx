@@ -153,34 +153,47 @@ function Hero() {
 }
 
 /* ========== Property form ========== */
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzvoorj";
+
 function PropertyForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     address: "", city: "", name: "", phone: "", type: "Single-family home", timeline: "Within 30 days"
   });
   const upd = (k) => (e) => setForm({ ...form, [k]: e.target.value });
   const submit = async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-
-  formData.append("Property Address", form.address);
-  formData.append("City", form.city);
-  formData.append("Property Type", form.type);
-  formData.append("Name", form.name);
-  formData.append("Phone", form.phone);
-  formData.append("Timeline", form.timeline);
-
- const response = await fetch("https://formspree.io/f/mzdonjdw", {
-  method: "POST",
-  body: formData,
-  headers: {
-    Accept: "application/json",
-  },
-});
-
-  setSubmitted(true);
-};
+    e.preventDefault();
+    setError("");
+    setSending(true);
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: JSON.stringify({
+          _subject: `New property lead: ${form.address}, ${form.city}`,
+          form: "Hero property intake",
+          name: form.name,
+          phone: form.phone,
+          property_address: form.address,
+          city: form.city,
+          property_type: form.type,
+          timeline: form.timeline,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data?.errors?.[0]?.message || "Something went wrong. Please call or text us at 941-405-3419.");
+      }
+    } catch (err) {
+      setError("Network error. Please call or text us at 941-405-3419.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   if (submitted) {
     return (
@@ -248,9 +261,16 @@ function PropertyForm() {
           </select>
         </div>
       </div>
-<button type="submit" className="btn btn-primary btn-lg btn-full" style={{ marginTop: 22 }}>
-  Get my no-obligation offer <Icon.ArrowRight />
-</button>
+
+      <button type="submit" className="btn btn-primary btn-lg btn-full" style={{ marginTop: 22 }} disabled={sending}>
+        {sending ? "Sending…" : <>Get my no-obligation offer <Icon.ArrowRight/></>}
+      </button>
+
+      {error && (
+        <p style={{ marginTop: 12, fontSize: 13, color: "#B4451F", display: "flex", gap: 8, alignItems: "flex-start" }}>
+          <span>{error}</span>
+        </p>
+      )}
 
       <div className="form-divider">or speak with us directly</div>
 
@@ -428,7 +448,7 @@ function WhatWeBuy() {
   );
 }
 
-function HowItWorks() 
+function HowItWorks() {
   const steps = [
     {
       n: "01",
@@ -700,8 +720,39 @@ function FAQ() {
 /* ========== Contact ========== */
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ name: "", phone: "", best: "Anytime", note: "" });
   const upd = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const submit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSending(true);
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: JSON.stringify({
+          _subject: `New callback request: ${form.name}`,
+          form: "Contact callback request",
+          name: form.name,
+          phone: form.phone,
+          best_time: form.best,
+          notes: form.note,
+        }),
+      });
+      if (res.ok) {
+        setSent(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data?.errors?.[0]?.message || "Something went wrong. Please call or text us at 941-405-3419.");
+      }
+    } catch (err) {
+      setError("Network error. Please call or text us at 941-405-3419.");
+    } finally {
+      setSending(false);
+    }
+  };
   return (
     <section className="section contact" id="contact">
       <div className="wrap contact-grid">
@@ -735,7 +786,7 @@ function Contact() {
           </div>
         </div>
 
-        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="form-card" style={{ alignSelf: "start" }}>
+        <form onSubmit={submit} className="form-card" style={{ alignSelf: "start" }}>
           {sent ? (
             <div className="form-success">
               <div className="checkmark"><Icon.Check width="28" height="28"/></div>
@@ -775,9 +826,12 @@ function Contact() {
                   <textarea rows="3" placeholder="Property address, situation, timeline…" value={form.note} onChange={upd("note")}/>
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary btn-lg btn-full" style={{ marginTop: 18 }}>
-                Request my callback <Icon.ArrowRight/>
+              <button type="submit" className="btn btn-primary btn-lg btn-full" style={{ marginTop: 18 }} disabled={sending}>
+                {sending ? "Sending…" : <>Request my callback <Icon.ArrowRight/></>}
               </button>
+              {error && (
+                <p style={{ marginTop: 12, fontSize: 13, color: "#E2B36A" }}>{error}</p>
+              )}
               <p className="form-foot">
                 <Icon.Shield width="14" height="14"/>
                 <span>Phone or text only. We will never share your information.</span>
