@@ -63,7 +63,7 @@ const Icon = {
 
 /* ========== Brand mark (real logo) ========== */
 function BrandMark() {
-  return <img src="assets/logo-primary.jpg" alt="We Buy In FL logo" />;
+  return <img src="assets/logo-primary.png" alt="We Buy In FL — Florida Gulf Coast home buyers logo" width="1200" height="991" decoding="async" />;
 }
 function Stars({ n = 5, size = 14 }) {
   return (
@@ -101,7 +101,7 @@ function Header() {
         </a>
         <nav className="nav">
           <a href="#how">How it works</a>
-          <a href="#reviews">Reviews</a>
+          <a href="#promise">Our promise</a>
           <a href="#areas">Areas served</a>
           <a href="#why">Why us</a>
           <a href="#faq">FAQ</a>
@@ -110,8 +110,12 @@ function Header() {
           <a href="tel:+19414053419" className="phone-pill">
             <span className="dot" aria-hidden="true"></span>
             <Icon.Phone width="14" height="14"/>
-            <span className="long">Call or Text</span>
+            <span className="long">Call</span>
             <span>941-405-3419</span>
+          </a>
+          <a href="sms:+19414053419?&body=Hi,%20I'd%20like%20info%20about%20selling%20my%20Florida%20home." className="phone-pill phone-pill-text" aria-label="Text 941-405-3419">
+            <Icon.Message width="14" height="14"/>
+            <span className="long">Text us</span>
           </a>
         </div>
       </div>
@@ -139,7 +143,10 @@ function Hero() {
           </div>
           <div className="hero-cta-row">
             <a className="btn btn-gold btn-lg" href="tel:+19414053419">
-              <Icon.Phone/> Call or Text 941-405-3419
+              <Icon.Phone/> Call 941-405-3419
+            </a>
+            <a className="btn btn-navy btn-lg" href="sms:+19414053419?&body=Hi,%20I'd%20like%20info%20about%20selling%20my%20Florida%20home.">
+              <Icon.Message/> Text us
             </a>
             <a className="btn btn-outline btn-lg" href="#form">
               Get a fair cash offer <Icon.ArrowRight/>
@@ -153,14 +160,14 @@ function Hero() {
 }
 
 /* ========== Property form ========== */
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzvoorj";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mzdonjdw";
 
 function PropertyForm() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
-    address: "", city: "", name: "", phone: "", type: "Single-family home", timeline: "Within 30 days"
+    address: "", city: "", name: "", phone: "", situation: "Just exploring options", besttime: "Anytime"
   });
   const upd = (k) => (e) => setForm({ ...form, [k]: e.target.value });
   const submit = async (e) => {
@@ -178,8 +185,8 @@ function PropertyForm() {
           phone: form.phone,
           property_address: form.address,
           city: form.city,
-          property_type: form.type,
-          timeline: form.timeline,
+          property_situation: form.situation,
+          best_time_to_contact: form.besttime,
         }),
       });
       if (res.ok) {
@@ -217,7 +224,7 @@ function PropertyForm() {
     <form className="form-card" id="form" onSubmit={submit}>
       <span className="kicker-tag">Free, no-obligation offer</span>
       <h3 style={{ marginTop: 14 }}>Tell us about your property</h3>
-      <p className="form-sub">No pressure, no listing — just an honest conversation about your options.</p>
+      <p className="form-sub">No obligation. No commissions. We'll review your situation and explain your options clearly.</p>
 
       <div className="form-row">
         <div className="field">
@@ -230,13 +237,17 @@ function PropertyForm() {
             <input id="city" type="text" placeholder="Sarasota" required value={form.city} onChange={upd("city")} />
           </div>
           <div className="field">
-            <label htmlFor="type">Property type</label>
-            <select id="type" value={form.type} onChange={upd("type")}>
-              <option>Single-family home</option>
-              <option>Condo / townhome</option>
-              <option>Multi-family</option>
-              <option>Vacant land / lot</option>
-              <option>Mobile / manufactured</option>
+            <label htmlFor="situation">Property situation</label>
+            <select id="situation" value={form.situation} onChange={upd("situation")}>
+              <option>Needs repairs</option>
+              <option>Inherited property</option>
+              <option>Vacant house</option>
+              <option>Tenant issues</option>
+              <option>Behind on payments</option>
+              <option>Divorce or separation</option>
+              <option>Relocating</option>
+              <option>Tired landlord</option>
+              <option>Just exploring options</option>
               <option>Other</option>
             </select>
           </div>
@@ -252,18 +263,18 @@ function PropertyForm() {
           </div>
         </div>
         <div className="field">
-          <label htmlFor="when">Ideal timeline</label>
-          <select id="when" value={form.timeline} onChange={upd("timeline")}>
-            <option>Within 30 days</option>
-            <option>1–3 months</option>
-            <option>Flexible — best offer wins</option>
-            <option>Just exploring</option>
+          <label htmlFor="when">Best time to contact you</label>
+          <select id="when" value={form.besttime} onChange={upd("besttime")}>
+            <option>Anytime</option>
+            <option>Morning (8am–12pm)</option>
+            <option>Afternoon (12pm–5pm)</option>
+            <option>Evening (5pm–9pm)</option>
           </select>
         </div>
       </div>
 
       <button type="submit" className="btn btn-primary btn-lg btn-full" style={{ marginTop: 22 }} disabled={sending}>
-        {sending ? "Sending…" : <>Get my no-obligation offer <Icon.ArrowRight/></>}
+        {sending ? "Sending…" : <>Get a No-Pressure Offer <Icon.ArrowRight/></>}
       </button>
 
       {error && (
@@ -274,13 +285,18 @@ function PropertyForm() {
 
       <div className="form-divider">or speak with us directly</div>
 
-      <a href="tel:+19414053419" className="btn btn-gold btn-full">
-        <Icon.Phone/> Call or Text 941-405-3419
-      </a>
+      <div className="form-dual-cta">
+        <a href="tel:+19414053419" className="btn btn-gold">
+          <Icon.Phone/> Call 941-405-3419
+        </a>
+        <a href="sms:+19414053419?&body=Hi,%20I'd%20like%20info%20about%20selling%20my%20Florida%20home." className="btn btn-outline">
+          <Icon.Message/> Text us
+        </a>
+      </div>
 
       <p className="form-foot">
         <Icon.Shield width="14" height="14"/>
-        <span>Your information stays private. We never share or sell your details — this is a one-on-one conversation with the local team.</span>
+        <span>By submitting, you agree to be contacted by phone, text, or call about your property at the number provided. Message and data rates may apply; reply STOP to opt out. We never share or sell your information. No obligation to accept any offer.</span>
       </p>
     </form>
   );
@@ -291,75 +307,60 @@ function TrustStrip() {
   return (
     <div className="trust-strip">
       <div className="wrap trust-strip-inner">
-        <span className="trust-pill"><Stars/> <b>4.9</b> on Google · 27 reviews</span>
-        <span className="trust-pill"><Icon.Shield width="14" height="14" style={{color: "var(--gold-600)"}}/> <b>Licensed</b> Florida buyers</span>
-        <span className="trust-pill"><Icon.Pin width="14" height="14" style={{color: "var(--gold-600)"}}/> <b>Locally owned</b> on the Gulf Coast</span>
-        <span className="trust-pill"><Icon.Check style={{color: "var(--gold-600)"}}/> <b>200+</b> homeowners helped</span>
+        <span className="trust-pill"><Icon.Check style={{color: "var(--gold-600)"}}/> <b>No repairs</b> or cleaning needed</span>
+        <span className="trust-pill"><Icon.Check style={{color: "var(--gold-600)"}}/> <b>No commissions</b> or agent fees</span>
+        <span className="trust-pill"><Icon.Pin width="14" height="14" style={{color: "var(--gold-600)"}}/> <b>Local</b> Gulf Coast team</span>
+        <span className="trust-pill"><Icon.Clock width="14" height="14" style={{color: "var(--gold-600)"}}/> <b>You pick</b> the closing date</span>
       </div>
     </div>
   );
 }
 
 /* ========== Reviews ========== */
-function Reviews() {
-  const reviews = [
+/* ========== Our Promise (honest, verifiable — no fabricated reviews) ========== */
+function Promise() {
+  const promises = [
     {
-      q: "They actually picked up when I called — no voicemail maze. We closed in 12 days on my late mother's house in Englewood. Fair offer, no games.",
-      who: "Linda M.",
-      where: "Englewood, FL · Inherited home",
-      initial: "L",
-      source: "Google",
+      title: "A written, no-obligation offer",
+      desc: "We put our offer in writing and walk you through how we arrived at it. You are never required to accept — there is no cost and no pressure either way.",
     },
     {
-      q: "I had a rental in Port Charlotte the tenants trashed. Two agents told me to fix it first. These guys bought it as-is and even helped with the trash-out.",
-      who: "Marcus T.",
-      where: "Port Charlotte, FL · Tired landlord",
-      initial: "M",
-      source: "Google",
+      title: "The number we agree on is the number you get",
+      desc: "We don't lower the price at the closing table. Our offer reflects the property as-is, so there are no surprise deductions on closing day.",
     },
     {
-      q: "What I appreciated most was that they didn't try to lowball me at closing. The number we agreed on is the number I got. Honest, local, professional.",
-      who: "Diane & Bob R.",
-      where: "Venice, FL · Downsizing",
-      initial: "D",
-      source: "Google",
+      title: "References available on request",
+      desc: "We're a local team and happy to connect you with past sellers and our title company so you can verify who you're working with before you decide.",
+    },
+    {
+      title: "Sell as-is — no repairs, cleaning, or showings",
+      desc: "Leave what you don't want. There are no open houses, no staging, and no agent commissions. You choose a closing date that fits your plans.",
     },
   ];
   return (
-    <section className="section reviews" id="reviews">
+    <section className="section reviews" id="promise">
       <div className="wrap">
         <div className="reviews-head">
           <div>
-            <span className="eyebrow">Reviews · neighbors who sold to us</span>
-            <h2 className="h-section" style={{ marginTop: 14 }}>The reason most of our business comes from referrals.</h2>
+            <span className="eyebrow">Our promise to you</span>
+            <h2 className="h-section" style={{ marginTop: 14 }}>Clear, honest commitments — in writing, every time.</h2>
           </div>
-          <div className="google-summary" aria-label="4.9 stars on Google, 27 reviews">
-            <span className="g">G</span>
-            <div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                <span className="rating-num">4.9</span>
-                <Stars size={14}/>
-              </div>
-              <small>27 Google reviews</small>
-            </div>
-          </div>
+          <p className="lead" style={{ maxWidth: 360 }}>
+            We'd rather earn your trust than rush a deal. Here is exactly what you can expect when you reach out.
+          </p>
         </div>
         <div className="reviews-grid">
-          {reviews.map((r, i) => (
-            <article className="review-card" key={i} itemScope itemType="https://schema.org/Review">
-              <Stars size={16}/>
-              <blockquote itemProp="reviewBody">“{r.q}”</blockquote>
-              <div className="review-meta">
-                <div className="review-avatar">{r.initial}</div>
-                <div>
-                  <div className="who" itemProp="author">{r.who}</div>
-                  <div className="where">{r.where}</div>
-                </div>
-                <span className="source">{r.source}</span>
-              </div>
+          {promises.map((p, i) => (
+            <article className="review-card" key={i}>
+              <div className="promise-check"><Icon.Check width="18" height="18"/></div>
+              <h3 className="h-card" style={{ fontSize: 19 }}>{p.title}</h3>
+              <p style={{ fontSize: 14.5, color: "var(--ink-soft)", lineHeight: 1.55 }}>{p.desc}</p>
             </article>
           ))}
         </div>
+        <p style={{ marginTop: 28, fontSize: 13.5, color: "var(--ink-mute)", textAlign: "center" }}>
+          Sold to us before? <a href="sms:+19414053419?&body=Hi,%20I'd%20like%20to%20leave%20a%20review." style={{ color: "var(--navy-800)", fontWeight: 600, textDecoration: "underline" }}>Text us a review</a> — we'd be grateful.
+        </p>
       </div>
     </section>
   );
@@ -494,9 +495,9 @@ function HowItWorks() {
 
 function AreasServed() {
   const counties = [
-    { county: "Sarasota County", cities: ["Sarasota", "Venice", "North Port", "Osprey", "Nokomis", "Siesta Key"] },
+    { county: "Sarasota County", cities: ["Sarasota", "Venice", "North Port", "Osprey", "Nokomis", "Siesta Key"], link: { href: "sarasota.html", label: "Sell a house in Sarasota →" } },
     { county: "Charlotte County", cities: ["Port Charlotte", "Punta Gorda", "Englewood", "Rotonda West"] },
-    { county: "Manatee County", cities: ["Bradenton", "Palmetto", "Anna Maria", "Lakewood Ranch", "Parrish"] },
+    { county: "Manatee County", cities: ["Bradenton", "Palmetto", "Anna Maria", "Lakewood Ranch", "Parrish"], link: { href: "bradenton.html", label: "Sell a house in Bradenton →" } },
     { county: "Tampa Bay Area", cities: ["Tampa", "St. Petersburg", "Clearwater", "Brandon", "Riverview"] },
   ];
   return (
@@ -515,6 +516,9 @@ function AreasServed() {
                 <div className="city-list">
                   {c.cities.map((city) => <span key={city}>{city}</span>)}
                 </div>
+                {c.link && (
+                  <a href={c.link.href} className="county-link">{c.link.label}</a>
+                )}
               </div>
             ))}
           </div>
@@ -681,14 +685,18 @@ function NetworkVisual() {
 /* ========== FAQ ========== */
 function FAQ() {
   const items = [
-    { q: "How is this different from listing with a real estate agent?", a: "When you list with an agent, you pay 5–6% in commissions, prepare the home for showings, sign a multi-month contract, and wait for a buyer's financing to come through. We buy directly — no commissions, no repairs, no showings, no financing contingencies. You pick the closing date." },
-    { q: "Do I need to make repairs or clean before you'll buy?", a: "No. We buy properties exactly as they are — full of belongings, unrenovated, damaged, tenant-occupied, whatever the situation. Take what you want, leave the rest. We handle cleanup." },
-    { q: "What if my home is in foreclosure or behind on payments?", a: "Time matters in those situations, so please call as soon as you can. We've helped homeowners stop foreclosure and protect their credit by closing quickly and bringing accounts current at the title company." },
-    { q: "How quickly can you close?", a: "As fast as 7 days with cash, or on your preferred timeline — some sellers need 60+ days to find a new place, and that's fine. You set the date." },
-    { q: "Is your offer the actual amount I'll receive?", a: "Yes. We cover standard closing costs and there are no agent commissions. The number on the offer is what gets wired or cut as a check at closing, minus any liens or mortgage payoffs (which would happen in any sale)." },
-    { q: "Will you ever lower your offer at the closing table?", a: "No. The offer we make is the offer we close on. Re-trading at closing is one of the worst practices in this industry, and we don't do it. If something changes materially, we'll talk about it long before signing." },
-    { q: "Do you buy properties outside the Gulf Coast?", a: "Our core area runs from Bradenton down through Punta Gorda, plus Tampa Bay. If your property is elsewhere in Florida, call anyway — we may still buy it directly or refer you to a trusted local buyer in our network." },
-    { q: "What if I'm not sure I want to sell yet?", a: "That's fine. Most of our calls are exploratory. We'll walk through your options — including ones that don't involve us — and you decide what makes sense for your family. No pressure, no follow-up spam." },
+    { q: "Can I sell my Florida house as-is?", a: "Yes. We buy houses in any condition across the Gulf Coast. You don't need to make repairs, renovate, or fix anything before selling — we factor the current condition into our offer." },
+    { q: "Do I need to make repairs before selling?", a: "No. Leave the repairs to us. Whether the home needs a new roof, has water damage, or simply feels dated, you can sell it exactly as it stands today." },
+    { q: "Do I have to pay any commissions or fees?", a: "No. Because you're selling directly to us, there are no agent commissions and no listing fees. We also cover standard closing costs. Any existing mortgage payoff or liens come out of the proceeds, as they would in any sale." },
+    { q: "Can I sell an inherited house in Florida?", a: "Yes. We regularly buy inherited and probate properties and are comfortable working with executors, multiple heirs, and out-of-state owners. We can coordinate with your title company or attorney to keep things simple." },
+    { q: "Can I sell a vacant house?", a: "Yes. Vacant homes cost you taxes, insurance, and upkeep every month. We can take an empty property off your hands quickly so it stops draining your time and money." },
+    { q: "Can I sell a house with tenants still living in it?", a: "Yes. We buy tenant-occupied rentals, including ones with difficult tenants or unpaid rent. You don't have to handle an eviction first — we'll discuss the situation and take it from there." },
+    { q: "Do I need to clean out the house before selling?", a: "No. Take what matters to you and leave the rest behind. You don't need to clear out furniture, belongings, or debris — we handle the cleanup after closing." },
+    { q: "How long does it take to sell a house off-market?", a: "It depends on your situation and the property. Some sales close in a couple of weeks; others take longer when there's a mortgage payoff, title work, or you simply need more time. We work around your timeline rather than rushing you." },
+    { q: "Can I choose my closing date?", a: "Yes. You pick the date that works for you. If you need to close soon, we can move quickly. If you need extra weeks to find your next place, that's completely fine." },
+    { q: "What happens after I request an offer?", a: "A local team member reaches out to learn about the property and your goals. We review comparable sales and the home's condition, then present a written, no-obligation offer and walk you through how we got there." },
+    { q: "Is there any obligation to accept your offer?", a: "None at all. Our offer is free and carries no obligation. If it's not the right fit, you're free to walk away — and we'll still try to point you toward options that make sense for you." },
+    { q: "How is this different from listing with a real estate agent?", a: "Listing usually means commissions, repairs, showings, a multi-month contract, and waiting on a buyer's financing. Selling to us means no commissions, no repairs, no public showings, and a closing date you choose." },
   ];
   const [open, setOpen] = useState(0);
   return (
@@ -764,7 +772,7 @@ function Contact() {
 
           <div className="contact-row">
             <a className="contact-pill" href="tel:+19414053419"><Icon.Phone/> Call now</a>
-            <a className="contact-pill" href="sms:+19414053419"><Icon.Message/> Send a text</a>
+            <a className="contact-pill" href="sms:+19414053419?&body=Hi,%20I'd%20like%20info%20about%20selling%20my%20Florida%20home."><Icon.Message/> Send a text</a>
           </div>
 
           <ul className="contact-list">
@@ -867,7 +875,7 @@ function Footer() {
             <ul>
               <li><a href="#what">What we buy</a></li>
               <li><a href="#how">How it works</a></li>
-              <li><a href="#reviews">Reviews</a></li>
+              <li><a href="#promise">Our promise</a></li>
               <li><a href="#areas">Areas we serve</a></li>
               <li><a href="#faq">FAQ</a></li>
             </ul>
@@ -875,9 +883,9 @@ function Footer() {
           <div className="footer-col">
             <h5>Areas served</h5>
             <ul>
-              <li><a href="#areas">Sarasota County</a></li>
+              <li><a href="sarasota.html">Sell a house in Sarasota</a></li>
+              <li><a href="bradenton.html">Sell a house in Bradenton</a></li>
               <li><a href="#areas">Charlotte County</a></li>
-              <li><a href="#areas">Manatee County</a></li>
               <li><a href="#areas">Tampa Bay</a></li>
             </ul>
           </div>
@@ -885,7 +893,7 @@ function Footer() {
             <h5>Get in touch</h5>
             <ul>
               <li><a href="tel:+19414053419" style={{ fontWeight: 700, color: "var(--navy-800)" }}>Call · 941-405-3419</a></li>
-              <li><a href="sms:+19414053419">Text · 941-405-3419</a></li>
+              <li><a href="sms:+19414053419?&body=Hi,%20I'd%20like%20info%20about%20selling%20my%20Florida%20home.">Text · 941-405-3419</a></li>
               <li><a href="#contact">Request callback</a></li>
             </ul>
             <div className="footer-social">
@@ -898,9 +906,21 @@ function Footer() {
             </div>
           </div>
         </div>
+        <div className="footer-legal">
+          <p className="footer-disclaimer">
+            We Buy In FL is a Florida real estate acquisitions business serving the Gulf Coast. We are real estate investors, not licensed real estate agents or brokers, and we do not provide legal, tax, or financial advice. Any offer we make depends on reviewing the property and is not a guarantee of purchase price or closing timeline. You are never obligated to accept an offer. By contacting us or submitting a form, you consent to be reached by phone, call, or text at the number you provide; message and data rates may apply and you can reply STOP to opt out at any time.
+          </p>
+          <div className="footer-legal-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <span aria-hidden="true">·</span>
+            <a href="terms.html">Terms of Use</a>
+            <span aria-hidden="true">·</span>
+            <a href="disclaimer.html">Disclaimer</a>
+          </div>
+        </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} We Buy In FL. All rights reserved.</span>
-          <span>Webuyinfl.com · Florida Gulf Coast real estate acquisitions</span>
+          <span>Webuyinfl.com · Florida Gulf Coast real estate acquisitions · Call or text 941-405-3419</span>
         </div>
       </div>
     </footer>
@@ -919,7 +939,7 @@ function App() {
       const target = document.getElementById(id);
       if (!target) return;
       e.preventDefault();
-      const headerOffset = 76;
+      const headerOffset = 110;
       const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
       window.scrollTo({ top, behavior: "smooth" });
     };
@@ -935,7 +955,7 @@ function App() {
       <Marquee />
       <WhatWeBuy />
       <HowItWorks />
-      <Reviews />
+      <Promise />
       <AreasServed />
       <WhyUs />
       <InvestorNetwork />

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block nothing critical; this is a small lead-gen site.
+Disallow: /deploy/
+Disallow: /screenshots/
+Disallow: /uploads/
+
+Sitemap: https://webuyinfl.com/sitemap.xml
